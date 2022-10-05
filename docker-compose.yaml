@@ -1,0 +1,37 @@
+version: '3.1'
+
+volumes:
+  mariadb_vol:
+
+networks:
+  rede_php:
+    driver: bridge
+
+services:
+  mariadb:
+    image: mariadb:10.6
+    networks:
+      - rede_php
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadb_vol:/var/lib/mysql
+    restart: always
+    environment:
+      MARIADB_USER: admin
+      MARIADB_PASSWORD: teste_01
+      MYSQL_ROOT_PASSWORD: teste_mdb
+      MARIADB_DATABASE: db_1
+  
+  phpmyadmin:
+    image: phpmyadmin
+    networks:
+      - rede_php
+    ports:
+      - 8080:80
+    restart: always
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_PORT: 3306
+      PMA_HOST: mariadb
+      MYSQL_ROOT_PASSWORD: teste_mdb
